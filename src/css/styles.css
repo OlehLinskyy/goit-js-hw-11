@@ -60,6 +60,8 @@ input[type="text"], textarea {
 }
 .search-form{
     display: flex;
+    gap: 8px;
+    
 }
 .search-form > input{
     border: none;
@@ -69,6 +71,7 @@ input[type="text"], textarea {
     background-color: transparent;
     border: none;
     padding-top: 3px;
+    color:rgba(252, 252, 252, 0.823);
 }
 .link {
     text-decoration: none;
