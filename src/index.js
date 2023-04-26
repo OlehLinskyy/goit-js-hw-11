@@ -33,7 +33,7 @@ function onSearch(evt) {
     totalCount = hits.totalHits;
     clearContainer();
     appendArticlesMarkup(hits);
-    if (hits.length === 0) {
+    if (hits.hits.length === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
