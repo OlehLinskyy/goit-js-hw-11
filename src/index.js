@@ -22,6 +22,7 @@ function onSearch(evt) {
   count = 0;
   totalCount = 0;
   evt.preventDefault();
+  onListener();
   pixabayApiService.query = evt.currentTarget.elements.searchQuery.value;
 
   if (pixabayApiService.query.trim() === '') {
@@ -113,26 +114,36 @@ const lightbox = new SimpleLightbox('.gallery a', {
   captionDelay: 250,
 });
 
-window.addEventListener('scroll', () => {
-  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-  if (scrollTop + clientHeight >= scrollHeight - 5) {
-    if (count != totalCount) {
-      pixabayApiService.fetchHits().then(hits => {
-        appendArticlesMarkup(hits);
-        count += hits.hits.length;
-        if (hits.totalHits === count) {
-          Notiflix.Notify.info(
-            `We're sorry, but you've reached the end of search results.`
-          );
-        }
-        const { height: cardHeight } = document
-          .querySelector('.gallery')
-          .firstElementChild.getBoundingClientRect();
-        window.scrollBy({
-          top: cardHeight * 2,
-          behavior: 'smooth',
+function onListener() {
+    window.addEventListener('scroll', scrollListener );
+}
+
+function offListener() {
+    window.removeEventListener('scroll', scrollListener);
+}
+
+function scrollListener () {
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+    if (scrollTop + clientHeight >= scrollHeight - 5) {
+      if (count != totalCount) {
+        offListener();
+        pixabayApiService.fetchHits().then(hits => {
+          appendArticlesMarkup(hits);
+          count += hits.hits.length;
+          if (hits.totalHits === count) {
+            Notiflix.Notify.info(
+              `We're sorry, but you've reached the end of search results.`
+            );
+          }
+          const { height: cardHeight } = document
+            .querySelector('.gallery')
+            .firstElementChild.getBoundingClientRect();
+          window.scrollBy({
+            top: cardHeight * 2,
+            behavior: 'smooth',
+          });
+          onListener();
         });
-      });
+      };
     };
-  };
-});
+  }
